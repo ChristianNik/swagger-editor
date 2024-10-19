@@ -96,7 +96,12 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
             return value;
           })"
               >
-                <td class="px-6 py-4">{{ (response as any).code }}</td>
+                <td class="px-6 py-4" :class="{
+                  'text-green-500 font-bold': (response as any).code >= 200 && (response as any).code < 300,
+                  'text-orange-500': (response as any).code >= 300 && (response as any).code < 400,
+                  'text-red-500': (response as any).code >= 400 && (response as any).code < 500,
+                  'text-red-900': (response as any).code >= 500 && (response as any).code < 600,
+                }">{{ (response as any).code }}</td>
                 <td class="px-6 py-4">
                   {{ (response as any).description }}
 
