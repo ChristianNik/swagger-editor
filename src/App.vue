@@ -75,7 +75,7 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
           />
         </label>
 
-        <code class="bg-gray-200 whitespace-pre block p-3 rounded">
+        <code>
           {{ selectedItem.requestBody.content["application/json"] }}
         </code>
 

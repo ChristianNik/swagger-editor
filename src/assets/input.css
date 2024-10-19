@@ -12,3 +12,7 @@ button {
 label:has(input, select, textarea) {
   @apply flex flex-col gap-2;
 }
+
+code {
+  @apply bg-gray-200 whitespace-pre block p-3 rounded;
+}
