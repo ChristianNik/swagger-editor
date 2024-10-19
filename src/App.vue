@@ -1,41 +1,21 @@
 <script setup lang="ts">
-import exampleSwagger from "./assets/example-swagger.json";
+import SwaggerDocument from "./lib/SwaggerDocument";
 import MenuItem from "./components/MenuItem.vue";
 
-const addObjectKeyToObject = (array: object) =>
-  Object.entries(array).map(([method, data]) => ({
-    method,
-    ...data,
-  }));
-
-const getData = () => {
-  return Object.entries(exampleSwagger.paths).map(
-    ([path, availableMethods]) => {
-      return {
-        path,
-        methods: addObjectKeyToObject(availableMethods),
-      };
-    }
-  );
-};
-
-const data = getData();
+const swaggerDocument = new SwaggerDocument()
 </script>
 
 <template>
   <div class="grid grid-cols-3">
     <nav class="">
-      <details v-for="tag in exampleSwagger.tags">
+      <details v-for="tag in swaggerDocument.getTags()">
         <summary class="p-3 font-bold text-xl">
           {{ tag.name.toUpperCase() }}
         </summary>
 
         <ul class="">
           <div
-            v-for="item in data.map((d) => ({
-              ...d,
-              methods: d.methods.filter((m) => m.tags.includes(tag.name)),
-            }))"
+            v-for="item in swaggerDocument.getPathsForTag(tag.name)"
           >
             <MenuItem
               v-for="method in item.methods"
