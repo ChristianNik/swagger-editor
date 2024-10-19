@@ -2,12 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+select,
 input,
 textarea,
 button {
   @apply px-3 py-2 border rounded;
 }
 
-label:has(input, textarea) {
+label:has(input, select, textarea) {
   @apply flex flex-col gap-2;
 }
