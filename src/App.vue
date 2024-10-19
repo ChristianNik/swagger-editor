@@ -11,10 +11,10 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
 <template>
   <div class="grid grid-cols-3 h-screen">
     <nav class="">
-      <details v-for="tag in swaggerDocument.getTags()">
-        <summary class="p-3 font-bold text-xl">
+      <div v-for="tag in swaggerDocument.getTags()">
+        <h2 class="p-3 font-bold text-xl">
           {{ tag.name.toUpperCase() }}
-        </summary>
+        </h2>
 
         <ul class="">
           <div v-for="item in swaggerDocument.getPathsForTag(tag.name)">
@@ -25,7 +25,7 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
             />
           </div>
         </ul>
-      </details>
+      </div>
     </nav>
     <main class="col-span-2 border-l">
       <h1 class="p-3 border-b flex gap-3">
