@@ -1,10 +1,5 @@
+import type { HttpMethod } from "@/types/http-method";
 import exampleSwagger from "../assets/example-swagger.json";
-
-const addObjectKeyToObject = (array: object) =>
-  Object.entries(array).map(([method, data]) => ({
-    method,
-    ...data,
-  }));
 
 class SwaggerDocument {
   document = exampleSwagger;
@@ -16,9 +11,17 @@ class SwaggerDocument {
   getPaths() {
     return Object.entries(this.document.paths).map(
       ([path, availableMethods]) => {
+        path = path.trim()
+
+        const methods = Object.entries(availableMethods).map(([method, data]) => ({
+          path,
+          method,
+          ...data,
+        }));
+
         return {
           path,
-          methods: addObjectKeyToObject(availableMethods),
+          methods
         };
       }
     );
@@ -30,6 +33,11 @@ class SwaggerDocument {
       ...path,
       methods: path.methods.filter((item) => item.tags.includes(tag)),
     }));
+  }
+
+  getMethodForPath(path: string, method: HttpMethod) {
+    const foundItem = this.getPaths().find((p) => p.path === path);
+    return foundItem?.methods.find((i) => i.method === method);
   }
 }
 
