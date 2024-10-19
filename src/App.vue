@@ -9,7 +9,10 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
 </script>
 
 <template>
-  <div class="grid h-screen overflow-auto" style="grid-template-columns: auto 1fr;">
+  <div
+    class="grid h-screen overflow-auto"
+    style="grid-template-columns: auto 1fr"
+  >
     <nav class="overflow-auto">
       <div v-for="tag in swaggerDocument.getTags()">
         <h2 class="p-3 font-bold text-xl">
@@ -51,21 +54,30 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
         </label>
       </div>
       <div class="p-3 space-y-3 border-t">
-        <label>
-          Summary
-          <input
-            type="text"
-            :value="selectedItem.summary"
-          />
-        </label>
-
-        <!-- <h3 class="flex justify-between items-center">
+        <h3 class="flex justify-between items-center">
           <b>RequestBody</b>
 
           <select>
-            <option value="">dwa</option>
+            <option
+              v-for="option in Object.keys(selectedItem.requestBody.content)"
+              :value="option"
+            >
+              {{ option }}
+            </option>
           </select>
-        </h3> -->
+        </h3>
+
+        <label>
+          Description
+          <input
+            type="text"
+            :value="selectedItem.requestBody.description"
+          />
+        </label>
+
+        <code class="bg-gray-200 whitespace-pre block p-3 rounded">
+          {{ selectedItem.requestBody.content["application/json"] }}
+        </code>
 
         <h3 class="flex justify-between items-center">
           <b>Responses</b>
@@ -96,12 +108,17 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
             return value;
           })"
               >
-                <td class="px-6 py-4" :class="{
+                <td
+                  class="px-6 py-4"
+                  :class="{
                   'text-green-500 font-bold': (response as any).code >= 200 && (response as any).code < 300,
                   'text-orange-500': (response as any).code >= 300 && (response as any).code < 400,
                   'text-red-500': (response as any).code >= 400 && (response as any).code < 500,
                   'text-red-900': (response as any).code >= 500 && (response as any).code < 600,
-                }">{{ (response as any).code }}</td>
+                }"
+                >
+                  {{ (response as any).code }}
+                </td>
                 <td class="px-6 py-4">
                   {{ (response as any).description }}
 
