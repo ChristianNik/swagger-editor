@@ -44,6 +44,7 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
         <label>
           Description
           <textarea
+          class="h-32"
             type="text"
             :value="selectedItem.description"
           />
