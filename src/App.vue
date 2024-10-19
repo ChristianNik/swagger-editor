@@ -43,7 +43,7 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
 
         <label>
           Description
-          <input
+          <textarea
             type="text"
             :value="selectedItem.description"
           />

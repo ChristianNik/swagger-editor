@@ -3,10 +3,11 @@
 @tailwind utilities;
 
 input,
+textarea,
 button {
   @apply px-3 py-2 border rounded;
 }
 
-label:has(input) {
+label:has(input, textarea) {
   @apply flex flex-col gap-2;
 }
