@@ -122,8 +122,19 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
                 <td class="px-6 py-4">
                   {{ (response as any).description }}
 
-                  <div>
-                    {{ (response as any).content }}
+                  <div v-if="(response as any).content">
+                    <select>
+                      <option
+                        v-for="option in Object.keys((response as any).content )"
+                        :value="option"
+                      >
+                        {{ option }}
+                      </option>
+                    </select>
+
+                    <code class="mt-3">
+                      {{ (response as any).content?.["application/json"] }}
+                    </code>
                   </div>
                 </td>
               </tr>
