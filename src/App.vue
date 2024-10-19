@@ -25,10 +25,11 @@ const data = getData();
 <template>
   <div class="grid grid-cols-3">
     <nav class="">
-      <detail v-for="tag in exampleSwagger.tags">
+      <details v-for="tag in exampleSwagger.tags">
         <summary class="p-3 font-bold text-xl">
           {{ tag.name.toUpperCase() }}
         </summary>
+
         <ul class="">
           <div
             v-for="item in data.map((d) => ({
@@ -43,7 +44,7 @@ const data = getData();
             />
           </div>
         </ul>
-      </detail>
+      </details>
     </nav>
     <main class="col-span-2"></main>
   </div>
