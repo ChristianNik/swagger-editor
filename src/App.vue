@@ -9,7 +9,7 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
 </script>
 
 <template>
-  <div class="grid grid-cols-3 h-screen overflow-auto">
+  <div class="grid h-screen overflow-auto" style="grid-template-columns: auto 1fr;">
     <nav class="overflow-auto">
       <div v-for="tag in swaggerDocument.getTags()">
         <h2 class="p-3 font-bold text-xl">
@@ -27,7 +27,7 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
         </ul>
       </div>
     </nav>
-    <main class="col-span-2 border-l overflow-auto">
+    <main class="border-l overflow-auto">
       <h1 class="p-3 border-b flex gap-3 sticky top-0 bg-white z-10">
         <MethodDisplay :method="selectedItem.method" /> {{ selectedItem.path }}
       </h1>

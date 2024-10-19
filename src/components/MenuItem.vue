@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { HttpMethod } from "@/types/http-method";
-import MethodDisplay from './MethodDisplay.vue'
+import MethodDisplay from "./MethodDisplay.vue";
 defineProps<{
   method: HttpMethod;
   path: string;
@@ -9,7 +9,7 @@ defineProps<{
 
 <template>
   <li
-    class="px-3 py-1 grid hover:bg-gray-50"
+    class="px-3 py-2 grid gap-3 hover:bg-gray-50 cursor-pointer"
     style="grid-template-columns: 1fr 4fr"
   >
     <MethodDisplay :method="method" />
