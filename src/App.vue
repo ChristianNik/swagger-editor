@@ -9,8 +9,8 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
 </script>
 
 <template>
-  <div class="grid grid-cols-3 h-screen">
-    <nav class="">
+  <div class="grid grid-cols-3 h-screen overflow-auto">
+    <nav class="overflow-auto">
       <div v-for="tag in swaggerDocument.getTags()">
         <h2 class="p-3 font-bold text-xl">
           {{ tag.name.toUpperCase() }}
@@ -27,8 +27,8 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
         </ul>
       </div>
     </nav>
-    <main class="col-span-2 border-l">
-      <h1 class="p-3 border-b flex gap-3">
+    <main class="col-span-2 border-l overflow-auto">
+      <h1 class="p-3 border-b flex gap-3 sticky top-0 bg-white z-10">
         <MethodDisplay :method="selectedItem.method" /> {{ selectedItem.path }}
       </h1>
 
@@ -70,7 +70,7 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
         <h3 class="flex justify-between items-center">
           <b>Responses</b>
         </h3>
-        <div class="relative overflow-x-auto">
+        <div class="relative overflow-x-auto z-0">
           <table class="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
