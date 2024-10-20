@@ -23,7 +23,7 @@ const swaggerDocument = computed(
         <ul>
           <div
             v-for="path in swaggerDocument.paths.filter((p) => {
-              return (!p.tags && !tag.name) || p.tags.includes(tag.name);
+              return (!p.tags && !tag.name) || p.tags?.includes(tag.name);
             })"
           >
             <MenuItem
