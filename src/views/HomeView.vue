@@ -31,18 +31,18 @@ watch(selectedItem, () => {
 
 function handleSaveClick() {
   const copy = { ...swaggerDocument.value.document };
-  copy.paths[selectedPath.value][selectedMethod.value].summary = formData.value.summary;
+  copy.paths[selectedPath.value][selectedMethod.value].summary =
+    formData.value.summary;
 
   console.log(JSON.stringify(copy.paths));
   console.log(yaml.dump(copy));
-  
 }
 </script>
 
 <template>
   <div
     class="grid overflow-auto"
-    style="grid-template-columns: auto 1fr; height: calc(100vh - 48px);"
+    style="grid-template-columns: auto 1fr; height: calc(100vh - 48px)"
   >
     <nav class="overflow-hidden max-w-sm">
       <div v-for="tag in swaggerDocument.getTags()">
@@ -176,7 +176,12 @@ function handleSaveClick() {
                     {{ response.description }}
 
                     <div v-if="response.content">
-                      <select>
+                      <select
+                        v-if="
+                          response.content.length > 0 &&
+                          !!response.content[0].contentType
+                        "
+                      >
                         <option
                           v-for="option in response.content"
                           :value="option.contentType"
@@ -189,6 +194,7 @@ function handleSaveClick() {
                         {{
                           response.content.find(
                             (content) =>
+                              !content.contentType ||
                               content.contentType === "application/json"
                           )?.schema
                         }}

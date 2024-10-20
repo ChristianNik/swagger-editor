@@ -2,13 +2,13 @@ import type { HttpMethod } from "./http-method";
 
 export type SwaggerContent =
   | {
-      contentType: string;
+      contentType?: string;
       schema: {
         $ref: "#/components/schemas/Pet";
       };
     }
   | {
-      contentType: string;
+      contentType?: string;
       schema: {
         description: string;
       };
@@ -23,7 +23,7 @@ export type SwaggerRequestBody = {
 export type SwaggerResponse = {
   code: string;
   description: string;
-  content?: SwaggerContent[];
+  content: SwaggerContent[];
 };
 
 export type SwaggerPath = {

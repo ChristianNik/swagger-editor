@@ -1,5 +1,6 @@
 import type { HttpMethod } from "@/types/http-method";
 import type {
+  SwaggerContent,
   SwaggerPath,
   SwaggerRequestBody,
   SwaggerResponse,
@@ -43,19 +44,30 @@ class SwaggerDocument {
         const responses: SwaggerResponse[] = Object.entries<any>(
           pathData.responses
         ).map(([code, responseData]) => {
+          const content: SwaggerContent[] = [];
+          if (responseData["$ref"]) {
+            content.push({
+              contentType: undefined,
+              schema: responseData,
+            });
+          } else if (responseData.content) {
+            Object.entries<any>(responseData.content).forEach(
+              ([contentType, value]) => {
+                content.push({
+                  contentType,
+                  schema: value.schema,
+                });
+              }
+            );
+          }
+
+          console.log(content);
+          
+
           return {
             code,
             description: responseData.description,
-            content: responseData.content
-              ? Object.entries<any>(responseData.content).map(
-                  ([contentType, { schema }]) => {
-                    return {
-                      contentType,
-                      schema,
-                    };
-                  }
-                )
-              : undefined,
+            content,
           };
         });
 
