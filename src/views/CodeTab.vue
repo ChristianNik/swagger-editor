@@ -46,6 +46,10 @@ const code = computed(() => {
         </option>
       </select>
     </label>
-    <textarea class="h-screen">{{ code }}</textarea>
+    <textarea
+      class="h-screen"
+      readonly
+      >{{ code }}</textarea
+    >
   </div>
 </template>

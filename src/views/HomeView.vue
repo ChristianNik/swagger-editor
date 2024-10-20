@@ -14,7 +14,7 @@ const swaggerDocument = computed(
     class="grid overflow-auto"
     style="grid-template-columns: auto 1fr; height: calc(100vh - 48px)"
   >
-    <nav class="overflow-hidden max-w-sm">
+    <nav class="overflow-auto max-w-sm">
       <div v-for="tag in swaggerDocument.getTags()">
         <h2 class="p-3 font-bold text-xl">
           {{ tag.name ? tag.name.toUpperCase() : "Missing Tags" }}
