@@ -9,7 +9,6 @@ class SwaggerDocument {
   paths: SwaggerPath[] = [];
 
   constructor(public document: any) {
-    this.document = document;
     this.paths = this.getPaths();
   }
 
@@ -81,7 +80,7 @@ class SwaggerDocument {
       return tags;
     }
 
-    this.document.tags.foreach((tag: any) => {
+    this.document.tags.forEach((tag: any) => {
       tags.push({
         name: tag.name,
         description: tag.description,
