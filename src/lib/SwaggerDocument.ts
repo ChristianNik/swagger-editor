@@ -6,10 +6,10 @@ import type {
 } from "@/types/swagger";
 
 class SwaggerDocument {
-  paths: SwaggerPath[] = []
+  paths: SwaggerPath[] = [];
 
   constructor(public document: any) {
-    this.document = document
+    this.document = document;
     this.paths = this.getPaths();
   }
 
@@ -76,12 +76,19 @@ class SwaggerDocument {
   }
 
   getTags() {
-    return this.document.tags.map((tag: any) => {
-      return {
+    const tags = [{ name: "", description: "" }];
+    if (!this.document?.tags) {
+      return tags;
+    }
+
+    this.document.tags.foreach((tag: any) => {
+      tags.push({
         name: tag.name,
         description: tag.description,
-      };
+      });
     });
+
+    return tags;
   }
 
   getMethodForPath(path: string, method: HttpMethod) {

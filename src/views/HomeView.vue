@@ -14,7 +14,10 @@ const swaggerDocument = computed(
 );
 
 const selectedItem = computed(() =>
-  swaggerDocument.value.getMethodForPath(selectedPath.value, selectedMethod.value)
+  swaggerDocument.value.getMethodForPath(
+    selectedPath.value,
+    selectedMethod.value
+  )
 );
 
 const formData = ref({
@@ -41,14 +44,14 @@ function handleSaveClick() {
     <nav class="overflow-auto">
       <div v-for="tag in swaggerDocument.getTags()">
         <h2 class="p-3 font-bold text-xl">
-          {{ tag.name.toUpperCase() }}
+          {{ tag.name ? tag.name.toUpperCase() : "Missing Tags" }}
         </h2>
 
         <ul class="">
           <div
-            v-for="path in swaggerDocument.paths.filter((p) =>
-              p.tags.includes(tag.name)
-            )"
+            v-for="path in swaggerDocument.paths.filter((p) => {
+              return (!p.tags && !tag.name) || p.tags.includes(tag.name);
+            })"
           >
             <MenuItem
               :method="path.method"

@@ -2,15 +2,18 @@
 import { store } from "@/lib/store";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import yaml from "js-yaml";
 
 const router = useRouter();
 const swaggerCode = ref(JSON.stringify(store.importedSwaggerDocument, null, 2));
 
 function handleSubmitClick() {
   try {
-    store.importedSwaggerDocument = JSON.parse(swaggerCode.value);
+    const parsed = yaml.load(swaggerCode.value, {
+      json: true,
+    });
+    store.importedSwaggerDocument = parsed;
     alert("Imported!");
-
     router.push("/");
   } catch (error) {
     alert("Could not parse.");
