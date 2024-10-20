@@ -1,5 +1,4 @@
 import type { HttpMethod } from "@/types/http-method";
-import exampleSwagger from "../assets/example-swagger.json";
 import type {
   SwaggerPath,
   SwaggerRequestBody,
@@ -7,18 +6,25 @@ import type {
 } from "@/types/swagger";
 
 class SwaggerDocument {
-  document = exampleSwagger;
+  paths: SwaggerPath[] = []
 
-  paths = this.getPaths();
+  constructor(public document: any) {
+    this.document = document
+    this.paths = this.getPaths();
+  }
 
   /**
    * Parse the swagger paths into a [SwaggerPath] array.
-   * 
+   *
    * @returns A list of [SwaggerPath].
    */
   private getPaths() {
+    if (!this.document) {
+      return [];
+    }
+
     const items: SwaggerPath[] = [];
-    Object.entries(this.document.paths).forEach(([path, methods]) => {
+    Object.entries<any>(this.document.paths).forEach(([path, methods]) => {
       Object.entries<any>(methods).forEach(([method, pathData]) => {
         const requestBody: SwaggerRequestBody | undefined = pathData.requestBody
           ? {
@@ -70,7 +76,7 @@ class SwaggerDocument {
   }
 
   getTags() {
-    return this.document.tags.map((tag) => {
+    return this.document.tags.map((tag: any) => {
       return {
         name: tag.name,
         description: tag.description,

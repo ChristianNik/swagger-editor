@@ -4,14 +4,17 @@ import MenuItem from "../components/MenuItem.vue";
 import MethodDisplay from "../components/MethodDisplay.vue";
 import { computed, ref, watch } from "vue";
 import type { HttpMethod } from "../types/http-method";
+import { store } from "@/lib/store";
 
 const selectedPath = ref("");
 const selectedMethod = ref<HttpMethod>("get");
 
-const swaggerDocument = new SwaggerDocument();
+const swaggerDocument = computed(
+  () => new SwaggerDocument(store.importedSwaggerDocument)
+);
 
 const selectedItem = computed(() =>
-  swaggerDocument.getMethodForPath(selectedPath.value, selectedMethod.value)
+  swaggerDocument.value.getMethodForPath(selectedPath.value, selectedMethod.value)
 );
 
 const formData = ref({
@@ -23,16 +26,15 @@ watch(selectedItem, () => {
 });
 
 function handleSaveClick() {
-  const copy = { ...swaggerDocument.document };
-  copy.paths["/pet"]["put"].summary = formData.value.summary;
+  const copy = { ...swaggerDocument.value.document };
+  // copy.paths["/pet"]["put"].summary = formData.value.summary;
 
   console.log(copy.paths);
 }
-
 </script>
 
 <template>
-<div
+  <div
     class="grid h-screen overflow-auto"
     style="grid-template-columns: auto 1fr"
   >
