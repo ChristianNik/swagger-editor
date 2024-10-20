@@ -5,6 +5,7 @@ import MethodDisplay from "../components/MethodDisplay.vue";
 import { computed, ref, watch } from "vue";
 import type { HttpMethod } from "../types/http-method";
 import { store } from "@/lib/store";
+import yaml from "js-yaml";
 
 const selectedPath = ref("");
 const selectedMethod = ref<HttpMethod>("get");
@@ -30,9 +31,11 @@ watch(selectedItem, () => {
 
 function handleSaveClick() {
   const copy = { ...swaggerDocument.value.document };
-  // copy.paths["/pet"]["put"].summary = formData.value.summary;
+  copy.paths[selectedPath.value][selectedMethod.value].summary = formData.value.summary;
 
-  console.log(copy.paths);
+  console.log(JSON.stringify(copy.paths));
+  console.log(yaml.dump(copy));
+  
 }
 </script>
 
