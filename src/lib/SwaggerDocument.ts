@@ -61,9 +61,6 @@ class SwaggerDocument {
             );
           }
 
-          console.log(content);
-          
-
           return {
             code,
             description: responseData.description,
