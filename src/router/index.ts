@@ -16,6 +16,13 @@ const router = createRouter({
 
         return true;
       },
+      children: [
+        {
+          path: "/",
+          name: "home.view",
+          component: ViewTab,
+        },
+      ],
     },
     {
       path: "/import",
