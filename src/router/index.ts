@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import ViewTab from "../views/ViewTab.vue";
+import CodeTab from "../views/CodeTab.vue";
 import { store } from "@/lib/store";
 
 const router = createRouter({
@@ -21,6 +23,11 @@ const router = createRouter({
           path: "/",
           name: "home.view",
           component: ViewTab,
+        },
+        {
+          path: "/code",
+          name: "home.code",
+          component: CodeTab,
         },
       ],
     },
