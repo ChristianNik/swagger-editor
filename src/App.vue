@@ -2,10 +2,32 @@
 import SwaggerDocument from "./lib/SwaggerDocument";
 import MenuItem from "./components/MenuItem.vue";
 import MethodDisplay from "./components/MethodDisplay.vue";
+import { computed, ref, watch } from "vue";
+import type { HttpMethod } from "./types/http-method";
+
+const selectedPath = ref("");
+const selectedMethod = ref<HttpMethod>("get");
 
 const swaggerDocument = new SwaggerDocument();
 
-const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
+const selectedItem = computed(() =>
+  swaggerDocument.getMethodForPath(selectedPath.value, selectedMethod.value)
+);
+
+const formData = ref({
+  summary: "",
+});
+
+watch(selectedItem, () => {
+  formData.value.summary = selectedItem.value?.summary || "";
+});
+
+function handleSaveClick() {
+  const copy = { ...swaggerDocument.document };
+  copy.paths["/pet"]["put"].summary = formData.value.summary;
+
+  console.log(copy.paths);
+}
 </script>
 
 <template>
@@ -28,6 +50,12 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
             <MenuItem
               :method="path.method"
               :path="path.path"
+              @click="
+                () => {
+                  selectedPath = path.path;
+                  selectedMethod = path.method;
+                }
+              "
             />
           </div>
         </ul>
@@ -45,7 +73,7 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
             Summary
             <input
               type="text"
-              :value="selectedItem.summary"
+              v-model="formData.summary"
             />
           </label>
 
@@ -162,6 +190,16 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
               </tbody>
             </table>
           </div>
+        </div>
+        <div
+          class="p-3 space-y-3 border-t sticky bottom-0 bg-white z-10 flex justify-end"
+        >
+          <button
+            class="bg-blue-500 text-white hover:bg-blue-400 border-inherit min-w-20"
+            @click="handleSaveClick()"
+          >
+            Save
+          </button>
         </div>
       </div>
       <div v-else>No path selected!</div>
