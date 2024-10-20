@@ -72,12 +72,12 @@ function handleSaveClick() {
     </nav>
     <main class="border-l overflow-auto">
       <div v-if="selectedItem">
-        <h1 class="p-3 border-b flex gap-3 sticky top-0 bg-white z-10">
+        <h1 class="p-4 border-b flex gap-3 sticky top-0 bg-white z-10">
           <MethodDisplay :method="selectedItem.method" />
           {{ selectedItem.path }}
         </h1>
 
-        <div class="p-3 space-y-3">
+        <div class="p-4 space-y-3">
           <label>
             Summary
             <input
@@ -95,7 +95,7 @@ function handleSaveClick() {
             />
           </label>
         </div>
-        <div class="p-3 space-y-3 border-t">
+        <div class="p-4 space-y-3 border-t">
           <h3 class="flex justify-between items-center">
             <b>RequestBody</b>
 
@@ -207,7 +207,7 @@ function handleSaveClick() {
           </div>
         </div>
         <div
-          class="p-3 space-y-3 border-t sticky bottom-0 bg-white z-10 flex justify-end"
+          class="p-4 space-y-3 border-t sticky bottom-0 bg-white z-10 flex justify-end"
         >
           <button
             class="bg-blue-500 text-white hover:bg-blue-400 border-inherit min-w-20"
