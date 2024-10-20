@@ -1,4 +1,5 @@
 import './assets/input.css'
+import './assets/swagger-material.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'

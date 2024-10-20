@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import ViewTab from "../views/ViewTab.vue";
 import CodeTab from "../views/CodeTab.vue";
+import SwaggerTab from "../views/SwaggerTab.vue";
 import { store } from "@/lib/store";
 
 const router = createRouter({
@@ -28,6 +29,10 @@ const router = createRouter({
           path: "/code",
           name: "home.code",
           component: CodeTab,
+        },  {
+          path: "/swagger",
+          name: "home.swagger",
+          component: SwaggerTab,
         },
       ],
     },

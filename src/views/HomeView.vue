@@ -54,6 +54,12 @@ const swaggerDocument = computed(
         >
           Code
         </RouterLink>
+        <RouterLink
+          class="p-3"
+          to="/swagger"
+        >
+          Swagger
+        </RouterLink>
       </div>
 
       <RouterView />
