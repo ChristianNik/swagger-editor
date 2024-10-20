@@ -1,0 +1,6 @@
+services:
+  server:
+    image: chnikel/swagger-editor
+    build: .
+    ports:
+      - 8080:8080 
