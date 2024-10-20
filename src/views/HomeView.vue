@@ -41,8 +41,8 @@ function handleSaveClick() {
 
 <template>
   <div
-    class="grid h-screen overflow-auto"
-    style="grid-template-columns: auto 1fr"
+    class="grid overflow-auto"
+    style="grid-template-columns: auto 1fr; height: calc(100vh - 48px);"
   >
     <nav class="overflow-hidden max-w-sm">
       <div v-for="tag in swaggerDocument.getTags()">

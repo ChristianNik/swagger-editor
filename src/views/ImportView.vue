@@ -23,8 +23,8 @@ function handleSubmitClick() {
 
 <template>
   <div
-    class="h-screen overflow-auto"
-    style="grid-template-columns: auto 1fr"
+    class="overflow-auto"
+    style="grid-template-columns: auto 1fr; height: calc(100vh - 48px)"
   >
     <main class="border-l overflow-auto">
       <div class="p-3 space-y-3 max-w-3xl mx-auto">
