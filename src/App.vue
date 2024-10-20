@@ -20,131 +20,151 @@ const selectedItem = swaggerDocument.getMethodForPath("/pet", "put");
         </h2>
 
         <ul class="">
-          <div v-for="item in swaggerDocument.getPathsForTag(tag.name)">
+          <div
+            v-for="path in swaggerDocument.paths.filter((p) =>
+              p.tags.includes(tag.name)
+            )"
+          >
             <MenuItem
-              v-for="method in item.methods"
-              :method="method.method"
-              :path="item.path"
+              :method="path.method"
+              :path="path.path"
             />
           </div>
         </ul>
       </div>
     </nav>
     <main class="border-l overflow-auto">
-      <h1 class="p-3 border-b flex gap-3 sticky top-0 bg-white z-10">
-        <MethodDisplay :method="selectedItem.method" /> {{ selectedItem.path }}
-      </h1>
+      <div v-if="selectedItem">
+        <h1 class="p-3 border-b flex gap-3 sticky top-0 bg-white z-10">
+          <MethodDisplay :method="selectedItem.method" />
+          {{ selectedItem.path }}
+        </h1>
 
-      <div class="p-3 space-y-3">
-        <label>
-          Summary
-          <input
-            type="text"
-            :value="selectedItem.summary"
-          />
-        </label>
+        <div class="p-3 space-y-3">
+          <label>
+            Summary
+            <input
+              type="text"
+              :value="selectedItem.summary"
+            />
+          </label>
 
-        <label>
-          Description
-          <textarea
-            class="h-32"
-            type="text"
-            :value="selectedItem.description"
-          />
-        </label>
-      </div>
-      <div class="p-3 space-y-3 border-t">
-        <h3 class="flex justify-between items-center">
-          <b>RequestBody</b>
+          <label>
+            Description
+            <textarea
+              class="h-32"
+              type="text"
+              :value="selectedItem.description"
+            />
+          </label>
+        </div>
+        <div class="p-3 space-y-3 border-t">
+          <h3 class="flex justify-between items-center">
+            <b>RequestBody</b>
 
-          <select>
-            <option
-              v-for="option in Object.keys(selectedItem.requestBody.content)"
-              :value="option"
-            >
-              {{ option }}
-            </option>
-          </select>
-        </h3>
-
-        <label>
-          Description
-          <input
-            type="text"
-            :value="selectedItem.requestBody.description"
-          />
-        </label>
-
-        <code>
-          {{ selectedItem.requestBody.content["application/json"] }}
-        </code>
-
-        <h3 class="flex justify-between items-center">
-          <b>Responses</b>
-        </h3>
-        <div class="relative overflow-x-auto z-0">
-          <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th
-                  scope="col"
-                  class="px-6 py-3"
-                >
-                  Code
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3"
-                >
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                class="bg-white border-b"
-                v-for="response in Object.entries(selectedItem.responses).map(([code, value]) => {
-            (value as any).code = code;
-            return value;
-          })"
+            <select>
+              <option
+                v-for="option in selectedItem.requestBody?.content"
+                :value="option.contentType"
               >
-                <td
-                  class="px-6 py-4"
-                  :class="{
-                  'text-green-500 font-bold': (response as any).code >= 200 && (response as any).code < 300,
-                  'text-orange-500': (response as any).code >= 300 && (response as any).code < 400,
-                  'text-red-500': (response as any).code >= 400 && (response as any).code < 500,
-                  'text-red-900': (response as any).code >= 500 && (response as any).code < 600,
-                }"
+                {{ option.contentType }}
+              </option>
+            </select>
+          </h3>
+
+          <label>
+            Description
+            <input
+              type="text"
+              :value="selectedItem.requestBody?.description"
+            />
+          </label>
+
+          <code>
+            {{
+              selectedItem.requestBody?.content.find(
+                (content) => content.contentType === "application/json"
+              )?.schema
+            }}
+          </code>
+
+          <h3 class="flex justify-between items-center">
+            <b>Responses</b>
+          </h3>
+          <div class="relative overflow-x-auto z-0">
+            <table
+              class="w-full text-sm text-left rtl:text-right text-gray-500"
+            >
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="px-6 py-3"
+                  >
+                    Code
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3"
+                  >
+                    Description
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="bg-white border-b"
+                  v-for="response in selectedItem.responses"
                 >
-                  {{ (response as any).code }}
-                </td>
-                <td class="px-6 py-4">
-                  {{ (response as any).description }}
+                  <td
+                    class="px-6 py-4"
+                    :class="{
+                      'text-green-500 font-bold':
+                        Number(response.code) >= 200 &&
+                        Number(response.code) < 300,
+                      'text-orange-500':
+                        Number(response.code) >= 300 &&
+                        Number(response.code) < 400,
+                      'text-red-500':
+                        Number(response.code) >= 400 &&
+                        Number(response.code) < 500,
+                      'text-red-900':
+                        Number(response.code) >= 500 &&
+                        Number(response.code) < 600,
+                    }"
+                  >
+                    {{ response.code }}
+                  </td>
+                  <td class="px-6 py-4">
+                    {{ response.description }}
 
-                  <div v-if="(response as any).content">
-                    <select>
-                      <option
-                        v-for="option in Object.keys((response as any).content )"
-                        :value="option"
-                      >
-                        {{ option }}
-                      </option>
-                    </select>
+                    <div v-if="response.content">
+                      <select>
+                        <option
+                          v-for="option in response.content"
+                          :value="option.contentType"
+                        >
+                          {{ option.contentType }}
+                        </option>
+                      </select>
 
-                    <code class="mt-3">
-                      {{ (response as any).content?.["application/json"] }}
-                    </code>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                      <code class="mt-3">
+                        {{
+                          response.content.find(
+                            (content) =>
+                              content.contentType === "application/json"
+                          )?.schema
+                        }}
+                      </code>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-      <pre>
-        {{ selectedItem }}
-      </pre>
+      <div v-else>No path selected!</div>
     </main>
   </div>
 </template>
