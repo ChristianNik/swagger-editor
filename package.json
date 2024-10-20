@@ -8,7 +8,8 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build --force"
+    "type-check": "vue-tsc --build --force",
+    "publish": "docker compose build && docker push chnikel/swagger-editor:latest"
   },
   "dependencies": {
     "js-yaml": "^4.1.0",
