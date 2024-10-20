@@ -89,7 +89,7 @@ function handleSaveClick() {
           <label>
             Description
             <textarea
-              class="h-32"
+              class="h-48"
               type="text"
               :value="selectedItem.description"
             />
