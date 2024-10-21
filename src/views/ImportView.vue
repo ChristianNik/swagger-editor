@@ -13,7 +13,6 @@ function handleSubmitClick() {
       json: true,
     });
     store.importedSwaggerDocument = parsed;
-    alert("Imported!");
     router.push("/");
   } catch (error) {
     alert("Could not parse.");
