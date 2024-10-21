@@ -68,13 +68,16 @@ function handleSaveClick() {
         />
       </label>
     </div>
-    <div class="p-6 space-y-3 border-t">
+    <div
+      v-if="selectedItem.requestBody"
+      class="p-6 space-y-3 border-t"
+    >
       <h3 class="flex justify-between items-center">
         <b>RequestBody</b>
 
         <select>
           <option
-            v-for="option in selectedItem.requestBody?.content"
+            v-for="option in selectedItem.requestBody.content"
             :value="option.contentType"
           >
             {{ option.contentType }}
@@ -86,18 +89,29 @@ function handleSaveClick() {
         Description
         <input
           type="text"
-          :value="selectedItem.requestBody?.description"
+          :value="selectedItem.requestBody.description"
         />
       </label>
 
       <code>
         {{
-          selectedItem.requestBody?.content.find(
+          selectedItem.requestBody.content.find(
             (content) => content.contentType === "application/json"
           )?.schema
         }}
       </code>
+    </div>
+    <div
+      v-else
+      class="p-6 space-y-3 border-t"
+    >
+      <h3 class="flex justify-between items-center">
+        <b>RequestBody</b>
+      </h3>
 
+      No RequestBody
+    </div>
+    <div class="p-6 space-y-3 border-t">
       <h3 class="flex justify-between items-center">
         <b>Responses</b>
       </h3>
