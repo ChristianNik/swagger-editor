@@ -4,6 +4,7 @@ import type {
   SwaggerPath,
   SwaggerRequestBody,
   SwaggerResponse,
+  SwaggerParameters,
 } from "@/types/swagger";
 
 class SwaggerDocument {
@@ -40,6 +41,18 @@ class SwaggerDocument {
               ),
             }
           : undefined;
+
+        const parameters: SwaggerParameters[] = pathData.parameters?.map(
+          (parameter: any): SwaggerParameters => {
+            return {
+              name: parameter.name,
+              in: parameter.in,
+              description: parameter.description,
+              required: parameter.required,
+              schema: parameter["$ref"] ? parameter["$ref"] : parameter.schema
+            };
+          }
+        ) || [];
 
         const responses: SwaggerResponse[] = pathData.responses
           ? Object.entries<any>(pathData.responses).map(
@@ -78,6 +91,7 @@ class SwaggerDocument {
           operationId: pathData.operationId,
           tags: pathData.tags,
           requestBody,
+          parameters,
           responses,
         });
       });

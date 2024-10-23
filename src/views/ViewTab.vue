@@ -4,6 +4,7 @@ import MethodDisplay from "../components/MethodDisplay.vue";
 import { computed, ref, watch } from "vue";
 import { store } from "@/lib/store";
 import yaml from "js-yaml";
+import ParametersSection from "@/components/ParametersSection.vue";
 
 const swaggerDocument = computed(
   () => new SwaggerDocument(store.importedSwaggerDocument)
@@ -68,6 +69,7 @@ function handleSaveClick() {
         />
       </label>
     </div>
+    <ParametersSection :parameters="selectedItem.parameters" />
     <div
       v-if="selectedItem.requestBody"
       class="p-6 space-y-3 border-t"

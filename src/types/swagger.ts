@@ -1,18 +1,19 @@
 import type { HttpMethod } from "./http-method";
 
-export type SwaggerContent =
+export type SwaggerSchema =
   | {
-      contentType?: string;
-      schema: {
-        $ref: "#/components/schemas/Pet";
-      };
+      $ref: string;
     }
   | {
-      contentType?: string;
-      schema: {
-        description: string;
-      };
+      type: "string" | "number";
+      description: string;
+      format?: string
     };
+
+export type SwaggerContent = {
+  contentType?: string;
+  schema: SwaggerSchema;
+};
 
 export type SwaggerRequestBody = {
   description: string;
@@ -26,6 +27,14 @@ export type SwaggerResponse = {
   content: SwaggerContent[];
 };
 
+export type SwaggerParameters = {
+  name: string;
+  in: "path" | "query";
+  description: string;
+  required: boolean;
+  schema: SwaggerSchema;
+};
+
 export type SwaggerPath = {
   path: string;
   method: HttpMethod;
@@ -34,5 +43,6 @@ export type SwaggerPath = {
   operationId: string;
   tags: string[];
   requestBody?: SwaggerRequestBody;
+  parameters: SwaggerParameters[];
   responses: SwaggerResponse[];
 };
