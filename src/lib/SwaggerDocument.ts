@@ -6,6 +6,7 @@ import type {
   SwaggerResponse,
   SwaggerParameters,
 } from "@/types/swagger";
+import type { ResponseFormData } from "@/components/AddResponseDialog.vue";
 
 class SwaggerDocument {
   paths: SwaggerPath[] = [];
@@ -42,17 +43,16 @@ class SwaggerDocument {
             }
           : undefined;
 
-        const parameters: SwaggerParameters[] = pathData.parameters?.map(
-          (parameter: any): SwaggerParameters => {
+        const parameters: SwaggerParameters[] =
+          pathData.parameters?.map((parameter: any): SwaggerParameters => {
             return {
               name: parameter.name,
               in: parameter.in,
               description: parameter.description,
               required: parameter.required,
-              schema: parameter["$ref"] ? parameter["$ref"] : parameter.schema
+              schema: parameter["$ref"] ? parameter["$ref"] : parameter.schema,
             };
-          }
-        ) || [];
+          }) || [];
 
         const responses: SwaggerResponse[] = pathData.responses
           ? Object.entries<any>(pathData.responses).map(
@@ -117,6 +117,25 @@ class SwaggerDocument {
 
   getMethodForPath(path: string, method: HttpMethod) {
     return this.paths.find((p) => p.path === path && p.method === method);
+  }
+
+  addResponse(path: string, method: HttpMethod, data: ResponseFormData) {
+    const foundPath = Object.keys(this.document.paths).findIndex(
+      (p) => p === path
+    );
+
+    if (foundPath === -1) {
+      alert("Not found");
+      return;
+    }
+
+    this.document.paths[path][method].responses[data.code] = {
+      code: data.code,
+      description: data.description,
+      content: {
+        [data.contentType]: data.schema,
+      },
+    };
   }
 }
 

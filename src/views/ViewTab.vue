@@ -5,6 +5,9 @@ import { computed, ref, watch } from "vue";
 import { store } from "@/lib/store";
 import yaml from "js-yaml";
 import ParametersSection from "@/components/ParametersSection.vue";
+import AddResponseDialog, {
+  type ResponseFormData,
+} from "@/components/AddResponseDialog.vue";
 
 const swaggerDocument = computed(
   () => new SwaggerDocument(store.importedSwaggerDocument)
@@ -41,6 +44,21 @@ function handleSaveClick() {
 
   console.log(JSON.stringify(copy.paths));
   console.log(yaml.dump(copy));
+}
+
+const showAddResponseDialog = ref(false);
+
+function handleAddResponse(data: ResponseFormData) {
+  if (!store.selectedPath || !store.selectedMethod) {
+    alert("No path selected");
+    return;
+  }
+
+  swaggerDocument.value.addResponse(
+    store.selectedPath,
+    store.selectedMethod,
+    data
+  );
 }
 </script>
 
@@ -114,8 +132,15 @@ function handleSaveClick() {
       No RequestBody
     </div>
     <div class="p-6 space-y-3 border-t">
+      <AddResponseDialog
+        :open="showAddResponseDialog"
+        @close="showAddResponseDialog = false"
+        @submit="handleAddResponse"
+      />
+
       <h3 class="flex justify-between items-center">
         <b>Responses</b>
+        <button @click="showAddResponseDialog = true">Add Response</button>
       </h3>
       <div class="relative overflow-x-auto z-0">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
