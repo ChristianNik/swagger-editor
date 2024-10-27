@@ -2,10 +2,10 @@
 import MethodDisplay from "../components/MethodDisplay.vue";
 import { onMounted, ref } from "vue";
 import ParametersTable from "@/components/ParametersTable.vue";
-import AddParameter from "@/components/AddParameter.vue";
+import AddParameter from "@/components/ParameterForm.vue";
 import Dialog from "@/components/Dialog.vue";
 import { ParameterManager } from "@/lib/parameter-manager";
-import type { ResponseFormData } from "@/components/AddParameter.vue";
+import type { ResponseFormData } from "@/components/ParameterForm.vue";
 import type { ParameterType } from "@/lib/available-parameters";
 import { getMethodTailwindClass } from "@/lib/available-methods";
 
