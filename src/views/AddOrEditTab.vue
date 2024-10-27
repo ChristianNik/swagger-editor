@@ -17,7 +17,7 @@ interface PathFormData {
 }
 
 const formData = ref<PathFormData>({
-  path: "",
+  path: "/",
   method: "",
   description: "",
   parameters: new ParameterManager(),
