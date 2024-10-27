@@ -13,6 +13,7 @@ defineProps<{
 
 defineEmits<{
   (e: "edit", name: string): void;
+  (e: "delete", name: string): void;
 }>();
 </script>
 
@@ -59,6 +60,7 @@ defineEmits<{
         </td>
         <td>
           <button @click="$emit('edit', parameter.name)">Edit</button>
+          <button @click="$emit('delete', parameter.name)">Delete</button>
         </td>
       </tr>
     </tbody>

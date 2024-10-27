@@ -54,6 +54,12 @@ function updateParameter(name: string, data: Partial<Parameter>) {
   formData.value.parameters[foundIndex] = { ...parameterData, ...data };
 }
 
+function removeParameter(name: string) {
+  formData.value.parameters = formData.value.parameters.filter(
+    (p) => p.name !== name
+  );
+}
+
 const availableMethods = <const>["get", "post", "put", "delete"];
 
 function handleAddParameterClick() {
@@ -64,6 +70,10 @@ function handleEditParameter(name: string) {
   updateParameter(name, {
     name: "bob",
   });
+}
+
+function handleDeleteParameter(name: string) {
+  removeParameter(name);
 }
 </script>
 
@@ -120,6 +130,7 @@ function handleEditParameter(name: string) {
     <ParametersTable
       :data="formData.parameters"
       @edit="handleEditParameter"
+      @delete="handleDeleteParameter"
     />
   </div>
 </template>
