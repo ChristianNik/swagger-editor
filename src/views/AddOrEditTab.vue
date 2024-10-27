@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import MethodDisplay from "../components/MethodDisplay.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import ParametersTable from "@/components/ParametersTable.vue";
 import AddParameter from "@/components/AddParameter.vue";
+import Dialog from "@/components/Dialog.vue";
 import { ParameterManager } from "@/lib/parameter-manager";
 import type { ResponseFormData } from "@/components/AddParameter.vue";
 import type { ParameterType } from "@/lib/available-parameters";
@@ -23,12 +24,20 @@ const formData = ref<PathFormData>({
 
 const availableMethods = <const>["get", "post", "put", "delete"];
 
+const addParameterDialog = ref<InstanceType<typeof Dialog>>();
+
 function handleAddParameterClick() {
-  formData.value.parameters.add("status", "query");
+  addParameterDialog.value?.show();
 }
 
 function handleAddParameter(data: ResponseFormData) {
-  formData.value.parameters.add(data.name, data.location as ParameterType, data.description);
+  formData.value.parameters.add(
+    data.name,
+    data.location as ParameterType,
+    data.description
+  );
+
+  addParameterDialog.value?.close();
 }
 
 function handleEditParameter(name: string) {
@@ -90,9 +99,21 @@ function handleDeleteParameter(name: string) {
       Add
     </button>
   </h2>
-  <div class="px-6 py-3 space-y-3">
-    <AddParameter @submit="handleAddParameter" />
-  </div>
+  <Dialog ref="addParameterDialog">
+    <div class="rounded w-96">
+      <h2
+        class="px-6 py-3 border-y flex gap-3 justify-between items-center rounded-t font-bold"
+      >
+        Parameters
+
+        <button @click="addParameterDialog?.close()">X</button>
+      </h2>
+
+      <div class="px-6 py-3 rounded-b">
+        <AddParameter @submit="handleAddParameter" />
+      </div>
+    </div>
+  </Dialog>
   <div class="px-6 py-3 space-y-3">
     <ParametersTable
       :data="formData.parameters.parameters"
