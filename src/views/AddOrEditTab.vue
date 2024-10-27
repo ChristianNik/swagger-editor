@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MethodDisplay from "../components/MethodDisplay.vue";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import ParametersTable from "@/components/ParametersTable.vue";
 import AddParameter from "@/components/ParameterForm.vue";
 import Dialog from "@/components/Dialog.vue";
@@ -62,7 +62,11 @@ function handleEditParameterClick(name: string) {
 }
 
 function handleEditParameter(name: string, data: ResponseFormData) {
-  formData.value.parameters.update(name, data);
+  formData.value.parameters.update(name, {
+    name: data.name,
+    in: data.location as ParameterType,
+    description: data.description,
+  });
   ParameterDialog.value?.close();
 }
 
@@ -133,7 +137,9 @@ function handleDeleteParameter(name: string) {
       <div class="px-6 py-3 rounded-b">
         <AddParameter
           @submit="
-            isParameterEditMode ? handleEditParameter($event.name, $event) : handleAddParameter($event)
+            isParameterEditMode
+              ? handleEditParameter($event.name, $event)
+              : handleAddParameter($event)
           "
           :data="parameterData"
         />
