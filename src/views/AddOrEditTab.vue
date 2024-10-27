@@ -40,7 +40,7 @@ function handleAddParameter(data: ResponseFormData) {
     data.description
   );
 
-  closeEditParameterDialog()
+  closeEditParameterDialog();
 }
 
 const parameterData = ref<ResponseFormData | null>();
@@ -82,10 +82,13 @@ function handleDeleteParameter(name: string) {
 </script>
 
 <template>
-  <h1 class="px-6 py-3 border-b flex gap-3 sticky top-0 bg-white z-10">
-    <MethodDisplay :method="formData.method" />
-    <b>{{ formData.path }}</b>
-  </h1>
+  <div class="px-6 py-3 border-b flex justify-between items-center gap-3 sticky top-0 bg-white z-10">
+    <h1>
+      <MethodDisplay class="mr-3" :method="formData.method" />
+      <b >{{ formData.path }}</b>
+    </h1>
+    <button>Code</button>
+  </div>
 
   <div class="px-6 py-3 space-y-3">
     <label>
