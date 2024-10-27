@@ -25,9 +25,11 @@ const formData = ref<PathFormData>({
 
 const availableMethods = <const>["get", "post", "put", "delete"];
 
+const isParameterEditMode = ref(false);
 const ParameterDialog = ref<InstanceType<typeof Dialog>>();
 
 function handleAddParameterClick() {
+  isParameterEditMode.value = false;
   ParameterDialog.value?.show();
 }
 
@@ -41,10 +43,27 @@ function handleAddParameter(data: ResponseFormData) {
   ParameterDialog.value?.close();
 }
 
-function handleEditParameter(name: string) {
-  formData.value.parameters.update(name, {
-    name: "bob",
-  });
+const parameterData = ref<ResponseFormData | null>();
+function handleEditParameterClick(name: string) {
+  const data = formData.value.parameters.findByName(name);
+
+  if (!data) {
+    return;
+  }
+
+  parameterData.value = {
+    name: data.name,
+    location: data.in,
+    description: data.description || "",
+  };
+
+  isParameterEditMode.value = true;
+  ParameterDialog.value?.show();
+}
+
+function handleEditParameter(name: string, data: ResponseFormData) {
+  formData.value.parameters.update(name, data);
+  ParameterDialog.value?.close();
 }
 
 function handleDeleteParameter(name: string) {
@@ -112,14 +131,19 @@ function handleDeleteParameter(name: string) {
       </h2>
 
       <div class="px-6 py-3 rounded-b">
-        <AddParameter @submit="handleAddParameter" />
+        <AddParameter
+          @submit="
+            isParameterEditMode ? handleEditParameter($event.name, $event) : handleAddParameter($event)
+          "
+          :data="parameterData"
+        />
       </div>
     </div>
   </Dialog>
   <div class="px-6 py-3 space-y-3">
     <ParametersTable
       :data="formData.parameters.parameters"
-      @edit="handleEditParameter"
+      @edit="handleEditParameterClick"
       @delete="handleDeleteParameter"
     />
   </div>

@@ -7,11 +7,15 @@ export type ResponseFormData = {
 </script>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import {
   availableParameterTypes,
   type ParameterType,
 } from "@/lib/available-parameters";
+
+const props = defineProps<{
+  data?: ResponseFormData | null;
+}>();
 
 defineEmits<{
   (e: "close"): void;
@@ -22,6 +26,15 @@ const formData = ref<ResponseFormData>({
   name: "",
   location: "",
   description: "",
+  ...props.data,
+});
+
+watch(props, () => {
+  if (!props.data) {
+    return;
+  }
+
+  formData.value = { ...props.data };
 });
 </script>
 
