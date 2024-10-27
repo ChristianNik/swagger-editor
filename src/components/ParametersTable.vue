@@ -1,10 +1,14 @@
+<script lang="ts">
+export type Parameter = {
+  name: string;
+  in: "path" | "query";
+  description?: string;
+};
+</script>
+
 <script setup lang="ts">
 defineProps<{
-  data: {
-    name: string;
-    in: "path" | "query";
-    description?: string;
-  }[];
+  data: Parameter[];
 }>();
 </script>
 
