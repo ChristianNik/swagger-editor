@@ -16,3 +16,7 @@ label:has(input, select, textarea) {
 code {
   @apply bg-gray-200 whitespace-pre block p-3 rounded;
 }
+
+dialog {
+  @apply rounded;
+}
