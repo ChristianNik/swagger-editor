@@ -6,7 +6,7 @@ select,
 input,
 textarea,
 button {
-  @apply px-3 py-2 border rounded;
+  @apply px-3 py-2 border rounded bg-white;
 }
 
 label:has(input, select, textarea) {
