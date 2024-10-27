@@ -7,6 +7,7 @@ import Dialog from "@/components/Dialog.vue";
 import { ParameterManager } from "@/lib/parameter-manager";
 import type { ResponseFormData } from "@/components/AddParameter.vue";
 import type { ParameterType } from "@/lib/available-parameters";
+import { getMethodTailwindClass } from "@/lib/available-methods";
 
 interface PathFormData {
   path: string;
@@ -71,6 +72,7 @@ function handleDeleteParameter(name: string) {
       <select v-model="formData.method">
         <option
           v-for="method in availableMethods"
+          :class="getMethodTailwindClass(method)"
           :value="method"
         >
           {{ method.toUpperCase() }}
