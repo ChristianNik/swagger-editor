@@ -2,7 +2,7 @@
 import MethodDisplay from "../components/MethodDisplay.vue";
 import { ref } from "vue";
 import ParametersTable from "@/components/ParametersTable.vue";
-import AddParameter from "@/components/ParameterForm.vue";
+import ParameterForm from "@/components/ParameterForm.vue";
 import Dialog from "@/components/Dialog.vue";
 import { ParameterManager } from "@/lib/parameter-manager";
 import type { ResponseFormData } from "@/components/ParameterForm.vue";
@@ -135,7 +135,7 @@ function handleDeleteParameter(name: string) {
       </h2>
 
       <div class="px-6 py-3 rounded-b">
-        <AddParameter
+        <ParameterForm
           @submit="
             isParameterEditMode
               ? handleEditParameter($event.name, $event)
