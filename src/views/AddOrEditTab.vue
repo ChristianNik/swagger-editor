@@ -2,7 +2,10 @@
 import MethodDisplay from "../components/MethodDisplay.vue";
 import { ref } from "vue";
 import ParametersTable from "@/components/ParametersTable.vue";
+import AddParameter from "@/components/AddParameter.vue";
 import { ParameterManager } from "@/lib/parameter-manager";
+import type { ResponseFormData } from "@/components/AddParameter.vue";
+import type { ParameterType } from "@/lib/available-parameters";
 
 interface PathFormData {
   path: string;
@@ -24,6 +27,10 @@ function handleAddParameterClick() {
   formData.value.parameters.add("status", "query");
 }
 
+function handleAddParameter(data: ResponseFormData) {
+  formData.value.parameters.add(data.name, data.location as ParameterType, data.description);
+}
+
 function handleEditParameter(name: string) {
   formData.value.parameters.update(name, {
     name: "bob",
@@ -38,7 +45,7 @@ function handleDeleteParameter(name: string) {
 <template>
   <h1 class="px-6 py-3 border-b flex gap-3 sticky top-0 bg-white z-10">
     <MethodDisplay :method="formData.method" />
-    {{ formData.path }}
+    <b>{{ formData.path }}</b>
   </h1>
 
   <div class="px-6 py-3 space-y-3">
@@ -75,7 +82,7 @@ function handleDeleteParameter(name: string) {
   <h2
     class="px-6 py-3 border-y flex gap-3 justify-between items-center sticky top-0 bg-white z-10"
   >
-    Parameters
+    <b>Parameters</b>
     <button
       data-type="primary"
       @click="handleAddParameterClick"
@@ -83,6 +90,9 @@ function handleDeleteParameter(name: string) {
       Add
     </button>
   </h2>
+  <div class="px-6 py-3 space-y-3">
+    <AddParameter @submit="handleAddParameter" />
+  </div>
   <div class="px-6 py-3 space-y-3">
     <ParametersTable
       :data="formData.parameters.parameters"
