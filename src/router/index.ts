@@ -4,7 +4,6 @@ import ViewTab from "../views/ViewTab.vue";
 import AddOrEditTab from "../views/AddOrEditTab.vue";
 import CodeTab from "../views/CodeTab.vue";
 import SwaggerTab from "../views/SwaggerTab.vue";
-import { store } from "@/lib/store";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,8 +14,18 @@ const router = createRouter({
       component: HomeView,
       children: [
         {
-          path: "/",
-          name: "home.view",
+          path: "/info",
+          name: "home.info",
+          component: ViewTab,
+        },
+        {
+          path: "/paths",
+          name: "home.paths",
+          component: ViewTab,
+        },
+        {
+          path: "/tags",
+          name: "home.tags",
           component: ViewTab,
         },
         {

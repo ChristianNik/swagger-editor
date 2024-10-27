@@ -7,15 +7,39 @@ import { store } from "@/lib/store";
 const swaggerDocument = computed(
   () => new SwaggerDocument(store.importedSwaggerDocument)
 );
+
+const topLevelRoutes = [
+  { to: "/info", name: "Info" },
+  { to: "/paths", name: "Paths" },
+  { to: "/tags", name: "Tags" },
+];
 </script>
 
 <template>
   <div
     class="grid overflow-auto"
-    style="grid-template-columns: auto 1fr; height: calc(100vh - 48px)"
+    style="grid-template-columns: auto auto 1fr; height: calc(100vh - 48px)"
   >
+    <nav class="border-r">
+      <ul>
+        <li
+          class="h-12 w-12 flex items-center justify-center border-b rounded cursor-pointer"
+          v-for="path in topLevelRoutes"
+        >
+          <RouterLink
+            class="p-3"
+            :to="path.to"
+          >
+            {{ path.name }}
+          </RouterLink>
+        </li>
+      </ul>
+    </nav>
     <nav class="overflow-auto max-w-sm">
-      <div class="mb-6" v-for="tag in swaggerDocument.getTags()">
+      <div
+        class="mb-6"
+        v-for="tag in swaggerDocument.getTags()"
+      >
         <h2 class="p-3 font-bold text-xl">
           {{ tag.name ? tag.name.toUpperCase() : "Missing Tags" }}
         </h2>
