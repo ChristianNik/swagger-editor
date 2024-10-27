@@ -1,79 +1,37 @@
 <script setup lang="ts">
 import MethodDisplay from "../components/MethodDisplay.vue";
 import { ref } from "vue";
-import ParametersTable, {
-  type Parameter,
-} from "@/components/ParametersTable.vue";
+import ParametersTable from "@/components/ParametersTable.vue";
+import { ParameterManager } from "@/lib/parameter-manager";
 
 interface PathFormData {
   path: string;
   method: string;
   description?: string;
-  parameters: Parameter[];
+  parameters: ParameterManager;
 }
 
 const formData = ref<PathFormData>({
   path: "",
   method: "",
   description: "",
-  parameters: [{ name: "test", in: "query", description: "" }],
+  parameters: new ParameterManager(),
 });
-
-function addParameter(
-  name: string,
-  type: "path" | "query",
-  description?: string
-) {
-  const foundIndex = formData.value.parameters.findIndex(
-    (p) => p.name === name
-  );
-
-  if (foundIndex != -1) {
-    // Maybe throw an Exception
-    return;
-  }
-
-  formData.value.parameters.push({
-    name,
-    in: type,
-    description,
-  });
-}
-
-function updateParameter(name: string, data: Partial<Parameter>) {
-  const foundIndex = formData.value.parameters.findIndex(
-    (p) => p.name === name
-  );
-
-  if (foundIndex === -1) {
-    // Maybe throw an Exception
-    return;
-  }
-
-  const parameterData = formData.value.parameters[foundIndex];
-  formData.value.parameters[foundIndex] = { ...parameterData, ...data };
-}
-
-function removeParameter(name: string) {
-  formData.value.parameters = formData.value.parameters.filter(
-    (p) => p.name !== name
-  );
-}
 
 const availableMethods = <const>["get", "post", "put", "delete"];
 
 function handleAddParameterClick() {
-  addParameter("status", "query");
+  formData.value.parameters.add("status", "query");
 }
 
 function handleEditParameter(name: string) {
-  updateParameter(name, {
+  formData.value.parameters.update(name, {
     name: "bob",
   });
 }
 
 function handleDeleteParameter(name: string) {
-  removeParameter(name);
+  formData.value.parameters.removeByName(name);
 }
 </script>
 
@@ -125,10 +83,9 @@ function handleDeleteParameter(name: string) {
       Add
     </button>
   </h2>
-
   <div class="px-6 py-3 space-y-3">
     <ParametersTable
-      :data="formData.parameters"
+      :data="formData.parameters.parameters"
       @edit="handleEditParameter"
       @delete="handleDeleteParameter"
     />
