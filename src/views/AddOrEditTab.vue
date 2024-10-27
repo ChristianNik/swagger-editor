@@ -8,6 +8,7 @@ import { ParameterManager } from "@/lib/parameter-manager";
 import type { ResponseFormData } from "@/components/ParameterForm.vue";
 import type { ParameterType } from "@/lib/available-parameters";
 import { getMethodTailwindClass } from "@/lib/available-methods";
+import yaml from "js-yaml";
 
 interface PathFormData {
   path: string;
@@ -22,6 +23,21 @@ const formData = ref<PathFormData>({
   description: "",
   parameters: new ParameterManager(),
 });
+
+function handleCodeClick() {
+  const swagger = {
+    [formData.value.path]: {
+      [formData.value.method]: {
+        parameters: formData.value.parameters.parameters,
+        description: formData.value.description,
+        responses: [],
+      },
+    },
+  };
+
+  const parsed = yaml.dump(swagger);
+  console.log(parsed);
+}
 
 const availableMethods = <const>["get", "post", "put", "delete"];
 
@@ -82,12 +98,17 @@ function handleDeleteParameter(name: string) {
 </script>
 
 <template>
-  <div class="px-6 py-3 border-b flex justify-between items-center gap-3 sticky top-0 bg-white z-10">
+  <div
+    class="px-6 py-3 border-b flex justify-between items-center gap-3 sticky top-0 bg-white z-10"
+  >
     <h1>
-      <MethodDisplay class="mr-3" :method="formData.method" />
-      <b >{{ formData.path }}</b>
+      <MethodDisplay
+        class="mr-3"
+        :method="formData.method"
+      />
+      <b>{{ formData.path }}</b>
     </h1>
-    <button>Code</button>
+    <button @click="handleCodeClick">Code</button>
   </div>
 
   <div class="px-6 py-3 space-y-3">
