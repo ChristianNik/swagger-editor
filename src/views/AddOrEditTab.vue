@@ -40,7 +40,7 @@ function handleAddParameter(data: ResponseFormData) {
     data.description
   );
 
-  ParameterDialog.value?.close();
+  closeEditParameterDialog()
 }
 
 const parameterData = ref<ResponseFormData | null>();
@@ -67,6 +67,12 @@ function handleEditParameter(name: string, data: ResponseFormData) {
     in: data.location as ParameterType,
     description: data.description,
   });
+
+  closeEditParameterDialog();
+}
+
+function closeEditParameterDialog() {
+  parameterData.value = null;
   ParameterDialog.value?.close();
 }
 
@@ -131,7 +137,7 @@ function handleDeleteParameter(name: string) {
       >
         Parameters
 
-        <button @click="ParameterDialog?.close()">X</button>
+        <button @click="closeEditParameterDialog">X</button>
       </h2>
 
       <div class="px-6 py-3 rounded-b">

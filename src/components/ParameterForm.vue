@@ -17,31 +17,46 @@ const props = defineProps<{
   data?: ResponseFormData | null;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   (e: "close"): void;
   (e: "submit", value: ResponseFormData): void;
 }>();
 
-const formData = ref<ResponseFormData>({
+const initialFormData = {
   name: "",
   location: "",
   description: "",
+};
+
+const formData = ref<ResponseFormData>({
+  ...initialFormData,
   ...props.data,
 });
 
 watch(props, () => {
   if (!props.data) {
+    formData.value = initialFormData;
     return;
   }
 
   formData.value = { ...props.data };
 });
+
+const onSubmit = () => {
+  emit("submit", formData.value);
+
+  formData.value = {
+    name: "",
+    location: "",
+    description: "",
+  };
+};
 </script>
 
 <template>
   <form
     class="space-y-3"
-    @submit.prevent="$emit('submit', formData)"
+    @submit.prevent="onSubmit"
   >
     <label>
       Name
