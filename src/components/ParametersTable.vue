@@ -10,6 +10,10 @@ export type Parameter = {
 defineProps<{
   data: Parameter[];
 }>();
+
+defineEmits<{
+  (e: "edit", name: string): void;
+}>();
 </script>
 
 <template>
@@ -34,6 +38,9 @@ defineProps<{
         >
           Description
         </th>
+        <th>
+          <!-- Actions -->
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -49,6 +56,9 @@ defineProps<{
         </td>
         <td class="px-6 py-4">
           {{ parameter.description }}
+        </td>
+        <td>
+          <button @click="$emit('edit', parameter.name)">Edit</button>
         </td>
       </tr>
     </tbody>

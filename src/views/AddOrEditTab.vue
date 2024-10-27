@@ -27,6 +27,7 @@ function addParameter(
   const foundIndex = formData.value.parameters.findIndex(
     (p) => p.name === name
   );
+
   if (foundIndex != -1) {
     // Maybe throw an Exception
     return;
@@ -39,10 +40,30 @@ function addParameter(
   });
 }
 
+function updateParameter(name: string, data: Partial<Parameter>) {
+  const foundIndex = formData.value.parameters.findIndex(
+    (p) => p.name === name
+  );
+
+  if (foundIndex === -1) {
+    // Maybe throw an Exception
+    return;
+  }
+
+  const parameterData = formData.value.parameters[foundIndex];
+  formData.value.parameters[foundIndex] = { ...parameterData, ...data };
+}
+
 const availableMethods = <const>["get", "post", "put", "delete"];
 
 function handleAddParameterClick() {
   addParameter("status", "query");
+}
+
+function handleEditParameter(name: string) {
+  updateParameter(name, {
+    name: "bob",
+  });
 }
 </script>
 
@@ -96,6 +117,9 @@ function handleAddParameterClick() {
   </h2>
 
   <div class="px-6 py-3 space-y-3">
-    <ParametersTable :data="formData.parameters"/>
+    <ParametersTable
+      :data="formData.parameters"
+      @edit="handleEditParameter"
+    />
   </div>
 </template>
