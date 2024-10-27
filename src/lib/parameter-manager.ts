@@ -1,4 +1,5 @@
 import type { Parameter } from "@/components/ParametersTable.vue";
+import type { ParameterType } from "@/lib/available-parameters";
 
 export class ParameterManager {
   parameters: Parameter[] = [];
@@ -11,7 +12,7 @@ export class ParameterManager {
     return this.findIndexByName(name) !== -1;
   }
 
-  add(name: string, type: "path" | "query", description?: string) {
+  add(name: string, type: ParameterType, description?: string) {
     const doesExists = this.exists(name);
     if (doesExists) {
       // Maybe throw an Exception

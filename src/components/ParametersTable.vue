@@ -1,7 +1,9 @@
 <script lang="ts">
+import type { ParameterType } from "@/lib/available-parameters";
+
 export type Parameter = {
   name: string;
-  in: "path" | "query";
+  in: ParameterType;
   description?: string;
 };
 </script>
