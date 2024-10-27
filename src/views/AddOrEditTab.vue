@@ -25,10 +25,10 @@ const formData = ref<PathFormData>({
 
 const availableMethods = <const>["get", "post", "put", "delete"];
 
-const addParameterDialog = ref<InstanceType<typeof Dialog>>();
+const ParameterDialog = ref<InstanceType<typeof Dialog>>();
 
 function handleAddParameterClick() {
-  addParameterDialog.value?.show();
+  ParameterDialog.value?.show();
 }
 
 function handleAddParameter(data: ResponseFormData) {
@@ -38,7 +38,7 @@ function handleAddParameter(data: ResponseFormData) {
     data.description
   );
 
-  addParameterDialog.value?.close();
+  ParameterDialog.value?.close();
 }
 
 function handleEditParameter(name: string) {
@@ -101,14 +101,14 @@ function handleDeleteParameter(name: string) {
       Add
     </button>
   </h2>
-  <Dialog ref="addParameterDialog">
+  <Dialog ref="ParameterDialog">
     <div class="rounded w-96">
       <h2
         class="px-6 py-3 border-y flex gap-3 justify-between items-center rounded-t font-bold"
       >
         Parameters
 
-        <button @click="addParameterDialog?.close()">X</button>
+        <button @click="ParameterDialog?.close()">X</button>
       </h2>
 
       <div class="px-6 py-3 rounded-b">
