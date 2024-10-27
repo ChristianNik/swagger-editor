@@ -7,7 +7,7 @@ export type Parameter = {
 };
 
 export class ParameterManager {
-  parameters: Parameter[] = [];
+  constructor(public parameters: Parameter[] = []) {}
 
   findIndexByName(name: string) {
     return this.parameters.findIndex((p) => p.name === name);
