@@ -1,5 +1,10 @@
-import type { Parameter } from "@/components/ParametersTable.vue";
 import type { ParameterType } from "@/lib/available-parameters";
+
+export type Parameter = {
+  name: string;
+  in: ParameterType;
+  description?: string;
+};
 
 export class ParameterManager {
   parameters: Parameter[] = [];
@@ -10,6 +15,10 @@ export class ParameterManager {
 
   exists(name: string) {
     return this.findIndexByName(name) !== -1;
+  }
+
+  findByName(name: string) {
+    return this.parameters.find((p) => p.name === name);
   }
 
   add(name: string, type: ParameterType, description?: string) {
