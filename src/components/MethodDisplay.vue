@@ -1,20 +1,16 @@
 <script setup lang="ts">
-import type { HttpMethod } from '@/types/http-method';
+import {
+  getMethodTailwindClass,
+  type MethodType,
+} from "@/lib/available-methods";
 
 defineProps<{
-  method: HttpMethod | string;
+  method: MethodType | string;
 }>();
 </script>
 
 <template>
-  <b
-    :class="{
-      'text-green-500': method.toLowerCase() === 'post',
-      'text-yellow-500': method.toLowerCase() === 'put',
-      'text-blue-500': method.toLowerCase() === 'get',
-      'text-red-500': method.toLowerCase() === 'delete',
-    }"
-  >
+  <b :class="getMethodTailwindClass(method as MethodType )">
     {{ method.toUpperCase() }}
   </b>
 </template>
