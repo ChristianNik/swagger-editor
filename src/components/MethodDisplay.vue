@@ -2,7 +2,7 @@
 import type { HttpMethod } from '@/types/http-method';
 
 defineProps<{
-  method: HttpMethod;
+  method: HttpMethod | string;
 }>();
 </script>
 
