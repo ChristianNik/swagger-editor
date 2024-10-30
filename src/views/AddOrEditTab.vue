@@ -2,19 +2,25 @@
 import MethodDisplay from "../components/MethodDisplay.vue";
 import { ref } from "vue";
 import ParametersTable from "@/components/ParametersTable.vue";
+import ResponsesTable from "@/components/ResponsesTable.vue";
 import ParameterForm from "@/components/ParameterForm.vue";
+import ResponseForm, {
+  type ResponseFormData,
+} from "@/components/ResponseForm.vue";
 import Dialog from "@/components/Dialog.vue";
 import { ParameterManager } from "@/lib/parameter-manager";
 import type { ParameterFormData } from "@/components/ParameterForm.vue";
 import type { ParameterType } from "@/lib/available-parameters";
 import { getMethodTailwindClass } from "@/lib/available-methods";
 import yaml from "js-yaml";
+import { ResponseManager } from "@/lib/response-manager";
 
 interface PathFormData {
   path: string;
   method: string;
   description?: string;
   parameters: ParameterManager;
+  responses: ResponseManager;
 }
 
 const formData = ref<PathFormData>({
@@ -22,6 +28,7 @@ const formData = ref<PathFormData>({
   method: "",
   description: "",
   parameters: new ParameterManager(),
+  responses: new ResponseManager(),
 });
 
 function handleCodeClick() {
@@ -94,6 +101,55 @@ function closeEditParameterDialog() {
 
 function handleDeleteParameter(name: string) {
   formData.value.parameters.removeByName(name);
+}
+
+const isResponseEditMode = ref(false);
+const ResponseDialog = ref<InstanceType<typeof Dialog>>();
+
+function handleAddResponseClick() {
+  isResponseEditMode.value = false;
+  ResponseDialog.value?.show();
+}
+
+function handleAddResponse(data: ResponseFormData) {
+  formData.value.responses.add(data.code, data.description);
+
+  closeEditResponseDialog();
+}
+
+const responseData = ref<ResponseFormData | null>();
+function handleEditResponseClick(code: number) {
+  const data = formData.value.responses.findByCode(code);
+
+  if (!data) {
+    return;
+  }
+
+  responseData.value = {
+    code: data.code,
+    description: data.description,
+  };
+
+  isResponseEditMode.value = true;
+  ResponseDialog.value?.show();
+}
+
+function handleEditResponse(code: number, data: ResponseFormData) {
+  formData.value.responses.update(code, {
+    code: data.code,
+    description: data.description,
+  });
+
+  closeEditResponseDialog();
+}
+
+function handleDeleteResponse(code: number) {
+  formData.value.responses.removeByCode(code);
+}
+
+function closeEditResponseDialog() {
+  responseData.value = null;
+  ResponseDialog.value?.close();
 }
 </script>
 
@@ -181,6 +237,48 @@ function handleDeleteParameter(name: string) {
       :data="formData.parameters.parameters"
       @edit="handleEditParameterClick"
       @delete="handleDeleteParameter"
+    />
+  </div>
+
+  <h2
+    class="px-6 py-3 border-y flex gap-3 justify-between items-center sticky top-0 bg-white z-10"
+  >
+    <b>Responses</b>
+    <button
+      data-type="primary"
+      @click="handleAddResponseClick"
+    >
+      Add
+    </button>
+  </h2>
+
+  <Dialog ref="ResponseDialog">
+    <div class="rounded w-96">
+      <h2
+        class="px-6 py-3 border-y flex gap-3 justify-between items-center rounded-t font-bold"
+      >
+        Responses
+
+        <button @click="closeEditResponseDialog">X</button>
+      </h2>
+
+      <div class="px-6 py-3 rounded-b">
+        <ResponseForm
+          @submit="
+            isResponseEditMode
+              ? handleEditResponse($event.code, $event)
+              : handleAddResponse($event)
+          "
+          :data="responseData"
+        />
+      </div>
+    </div>
+  </Dialog>
+  <div class="px-6 py-3 space-y-3">
+    <ResponsesTable
+      :data="formData.responses.responses"
+      @edit="handleEditResponseClick"
+      @delete="handleDeleteResponse"
     />
   </div>
 
