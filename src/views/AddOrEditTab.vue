@@ -16,7 +16,7 @@ import { RequestBodyManager } from "@/lib/response-body-manager";
 import { SwaggerParser } from "@/lib/swagger-parser";
 import type { ParameterFormData } from "@/components/ParameterForm.vue";
 import type { ParameterType } from "@/lib/available-parameters";
-import { getMethodTailwindClass } from "@/lib/available-methods";
+import { availableMethods, getMethodTailwindClass } from "@/lib/available-methods";
 import { ResponseManager } from "@/lib/response-manager";
 import RequestBodyDisplay from "@/components/RequestBodyDisplay.vue";
 
@@ -58,7 +58,6 @@ function handleCodeClick() {
   console.log(parser.toYaml());
 }
 
-const availableMethods = <const>["get", "post", "put", "delete"];
 
 const isParameterEditMode = ref(false);
 const ParameterDialog = ref<InstanceType<typeof Dialog>>();
