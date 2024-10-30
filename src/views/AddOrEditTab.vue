@@ -4,23 +4,28 @@ import { ref } from "vue";
 import ParametersTable from "@/components/ParametersTable.vue";
 import ResponsesTable from "@/components/ResponsesTable.vue";
 import ParameterForm from "@/components/ParameterForm.vue";
+import RequestBodyForm, {
+  type RequestBodyFormData,
+} from "@/components/RequestBodyForm.vue";
 import ResponseForm, {
   type ResponseFormData,
 } from "@/components/ResponseForm.vue";
 import Dialog from "@/components/Dialog.vue";
 import { ParameterManager } from "@/lib/parameter-manager";
+import { RequestBodyManager } from "@/lib/response-body-manager";
 import { SwaggerParser } from "@/lib/swagger-parser";
 import type { ParameterFormData } from "@/components/ParameterForm.vue";
 import type { ParameterType } from "@/lib/available-parameters";
 import { getMethodTailwindClass } from "@/lib/available-methods";
-import yaml from "js-yaml";
 import { ResponseManager } from "@/lib/response-manager";
+import RequestBodyDisplay from "@/components/RequestBodyDisplay.vue";
 
 interface PathFormData {
   path: string;
   method: string;
   description?: string;
   parameters: ParameterManager;
+  requestBody: RequestBodyManager;
   responses: ResponseManager;
 }
 
@@ -29,6 +34,7 @@ const formData = ref<PathFormData>({
   method: "",
   description: "",
   parameters: new ParameterManager(),
+  requestBody: new RequestBodyManager(),
   responses: new ResponseManager(),
 });
 
@@ -40,7 +46,7 @@ function handleCodeClick() {
     formData.value.description || "",
     formData.value.parameters.parameters,
     parser.responsesFromArray(formData.value.responses.responses)
-  )
+  );
 
   console.log(parser.toYaml());
 }
@@ -116,6 +122,11 @@ function handleAddResponse(data: ResponseFormData) {
   closeEditResponseDialog();
 }
 
+function closeEditResponseDialog() {
+  responseData.value = null;
+  ResponseDialog.value?.close();
+}
+
 const responseData = ref<ResponseFormData | null>();
 function handleEditResponseClick(code: number) {
   const data = formData.value.responses.findByCode(code);
@@ -133,22 +144,44 @@ function handleEditResponseClick(code: number) {
   ResponseDialog.value?.show();
 }
 
+const requestBodyData = ref<RequestBodyFormData | null>();
 function handleEditResponse(code: number, data: ResponseFormData) {
   formData.value.responses.update(code, {
     code: data.code,
     description: data.description,
   });
 
-  closeEditResponseDialog();
+  closeEditRequestBodyDialog();
+}
+
+function handleRequestBodySubmit(data: RequestBodyFormData) {
+  formData.value.requestBody.requestBody = {
+    description: data.description,
+    required: data.required,
+    content: data.content,
+  };
+
+  closeEditRequestBodyDialog();
 }
 
 function handleDeleteResponse(code: number) {
   formData.value.responses.removeByCode(code);
 }
 
-function closeEditResponseDialog() {
-  responseData.value = null;
-  ResponseDialog.value?.close();
+const RequestBodyDialog = ref<InstanceType<typeof Dialog>>();
+function handleEditRequestBody() {
+  requestBodyData.value = {
+    description: formData.value.requestBody.requestBody.description,
+    required: formData.value.requestBody.requestBody.required,
+    content: formData.value.requestBody.requestBody.content,
+  };
+
+  RequestBodyDialog.value?.show();
+}
+
+function closeEditRequestBodyDialog() {
+  requestBodyData.value = null;
+  RequestBodyDialog.value?.close();
 }
 </script>
 
@@ -236,6 +269,42 @@ function closeEditResponseDialog() {
       :data="formData.parameters.parameters"
       @edit="handleEditParameterClick"
       @delete="handleDeleteParameter"
+    />
+  </div>
+
+  <h2
+    class="px-6 py-3 border-y flex gap-3 justify-between items-center sticky top-0 bg-white z-10"
+  >
+    <b>Request body</b>
+    <button
+      data-type="primary"
+      @click="handleEditRequestBody"
+    >
+      Edit
+    </button>
+  </h2>
+  <Dialog ref="RequestBodyDialog">
+    <div class="rounded w-96">
+      <h2
+        class="px-6 py-3 border-y flex gap-3 justify-between items-center rounded-t font-bold"
+      >
+        Request body
+
+        <button @click="closeEditRequestBodyDialog">X</button>
+      </h2>
+
+      <div class="px-6 py-3 rounded-b">
+        <RequestBodyForm
+          @submit="handleRequestBodySubmit"
+          :data="requestBodyData"
+        />
+      </div>
+    </div>
+  </Dialog>
+  <div class="px-6 py-3 space-y-3">
+    <RequestBodyDisplay
+      :description="formData.requestBody.requestBody.description"
+      :required="formData.requestBody.requestBody.required"
     />
   </div>
 
