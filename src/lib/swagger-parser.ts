@@ -43,7 +43,7 @@ export class SwaggerParser {
    */
   arrayToObject<T>(object: T[], key: keyof T, fn: (data: T) => object) {
     const contents = object.reduce<{ [key: string]: any }>((acc, item) => {
-      acc[key as any] = fn(item);
+      acc[item[key] as any] = fn(item);
       return acc;
     }, {});
 
