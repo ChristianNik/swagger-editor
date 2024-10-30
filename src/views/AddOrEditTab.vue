@@ -45,6 +45,7 @@ function handleCodeClick() {
     formData.value.method,
     formData.value.description || "",
     formData.value.parameters.parameters,
+    formData.value.requestBody.requestBody,
     parser.arrayToObject(
       formData.value.responses.responses,
       "code",
@@ -311,6 +312,7 @@ function closeEditRequestBodyDialog() {
     <RequestBodyDisplay
       :description="formData.requestBody.requestBody.description"
       :required="formData.requestBody.requestBody.required"
+      :contents="formData.requestBody.requestBody.content"
     />
   </div>
 

@@ -3,6 +3,7 @@ import type { OpenAPIV3_1 as OpenAPI } from "openapi-types";
 import yaml from "js-yaml";
 import type { HttpMethod } from "@/types/http-method";
 import type { Parameter } from "./parameter-manager";
+import type { RequestBody } from "./response-body-manager";
 
 export class SwaggerParser {
   swagger: Partial<OpenAPI.Document> = {
@@ -14,6 +15,7 @@ export class SwaggerParser {
     method: HttpMethod | string,
     description: string,
     parameters: Parameter[],
+    requestBody: RequestBody,
     responses: {
       [code: number | string]: any;
     }
@@ -23,6 +25,15 @@ export class SwaggerParser {
         [method]: {
           parameters: parameters,
           description: description,
+          requestBody: {
+            description: requestBody.description,
+            required: requestBody.required,
+            content: this.arrayToObject(
+              requestBody.content,
+              "type",
+              (content) => ({})
+            ),
+          },
           responses,
         },
       },
