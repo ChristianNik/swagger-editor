@@ -31,6 +31,10 @@ const formData = ref<RequestBodyFormData>({
   ...props.data,
 });
 
+const contentFormData = ref({
+  type: "",
+});
+
 watch(props, () => {
   if (!props.data) {
     formData.value = initialFormData;
@@ -45,6 +49,23 @@ const onSubmit = () => {
 
   formData.value = initialFormData;
 };
+
+function addContent(type: string) {
+  formData.value.content.push({
+    type,
+  });
+}
+
+function handleAddContentClick() {
+  addContent(contentFormData.value.type);
+  contentFormData.value.type = "";
+}
+
+function handleContentRemoveClick(type: string) {
+  formData.value.content = formData.value.content.filter(
+    (c) => c.type !== type
+  );
+}
 </script>
 
 <template>
@@ -75,6 +96,35 @@ const onSubmit = () => {
         Required
       </label>
     </div>
+
+    <h2>Content</h2>
+
+    <input
+      type="text"
+      v-model="contentFormData.type"
+    />
+
+    <button
+      type="button"
+      @click="handleAddContentClick"
+    >
+      Add Content
+    </button>
+
+    <ul>
+      <li
+        class="flex justify-between"
+        v-for="content in formData.content"
+      >
+        {{ content.type }}
+        <button
+          type="button"
+          @click="handleContentRemoveClick(content.type)"
+        >
+          x
+        </button>
+      </li>
+    </ul>
 
     <div class="flex justify-end">
       <button type="submit">Add Request body</button>
