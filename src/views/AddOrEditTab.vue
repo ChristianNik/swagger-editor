@@ -5,7 +5,7 @@ import ParametersTable from "@/components/ParametersTable.vue";
 import ParameterForm from "@/components/ParameterForm.vue";
 import Dialog from "@/components/Dialog.vue";
 import { ParameterManager } from "@/lib/parameter-manager";
-import type { ResponseFormData } from "@/components/ParameterForm.vue";
+import type { ParameterFormData } from "@/components/ParameterForm.vue";
 import type { ParameterType } from "@/lib/available-parameters";
 import { getMethodTailwindClass } from "@/lib/available-methods";
 import yaml from "js-yaml";
@@ -49,7 +49,7 @@ function handleAddParameterClick() {
   ParameterDialog.value?.show();
 }
 
-function handleAddParameter(data: ResponseFormData) {
+function handleAddParameter(data: ParameterFormData) {
   formData.value.parameters.add(
     data.name,
     data.location as ParameterType,
@@ -59,7 +59,7 @@ function handleAddParameter(data: ResponseFormData) {
   closeEditParameterDialog();
 }
 
-const parameterData = ref<ResponseFormData | null>();
+const parameterData = ref<ParameterFormData | null>();
 function handleEditParameterClick(name: string) {
   const data = formData.value.parameters.findByName(name);
 
@@ -77,7 +77,7 @@ function handleEditParameterClick(name: string) {
   ParameterDialog.value?.show();
 }
 
-function handleEditParameter(name: string, data: ResponseFormData) {
+function handleEditParameter(name: string, data: ParameterFormData) {
   formData.value.parameters.update(name, {
     name: data.name,
     in: data.location as ParameterType,

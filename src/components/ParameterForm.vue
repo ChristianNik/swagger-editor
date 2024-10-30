@@ -1,5 +1,5 @@
 <script lang="ts">
-export type ResponseFormData = {
+export type ParameterFormData = {
   name: string;
   location: ParameterType | string;
   description: string;
@@ -14,12 +14,12 @@ import {
 } from "@/lib/available-parameters";
 
 const props = defineProps<{
-  data?: ResponseFormData | null;
+  data?: ParameterFormData | null;
 }>();
 
 const emit = defineEmits<{
   (e: "close"): void;
-  (e: "submit", value: ResponseFormData): void;
+  (e: "submit", value: ParameterFormData): void;
 }>();
 
 const initialFormData = {
@@ -28,7 +28,7 @@ const initialFormData = {
   description: "",
 };
 
-const formData = ref<ResponseFormData>({
+const formData = ref<ParameterFormData>({
   ...initialFormData,
   ...props.data,
 });
