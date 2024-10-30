@@ -45,7 +45,13 @@ function handleCodeClick() {
     formData.value.method,
     formData.value.description || "",
     formData.value.parameters.parameters,
-    parser.responsesFromArray(formData.value.responses.responses)
+    parser.arrayToObject(
+      formData.value.responses.responses,
+      "code",
+      (response) => ({
+        description: response.description,
+      })
+    )
   );
 
   console.log(parser.toYaml());

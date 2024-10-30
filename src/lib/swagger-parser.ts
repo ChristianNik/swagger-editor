@@ -35,24 +35,19 @@ export class SwaggerParser {
   }
 
   /**
-   * Convert responses array to object with code as the key
+   * Convert an array to an object.
    *
    * @param object
    *
    * @returns An object in the swagger response structure.
    */
-  responsesFromArray(object: { code: number | string; [key: string]: any }[]) {
-    const responses = object.reduce<{
-      [code: number | string]: any;
-    }>((acc, response) => {
-      acc[response.code] = {
-        description: response.description,
-      };
-
+  arrayToObject<T>(object: T[], key: keyof T, fn: (data: T) => object) {
+    const contents = object.reduce<{ [key: string]: any }>((acc, item) => {
+      acc[key as any] = fn(item);
       return acc;
     }, {});
 
-    return responses;
+    return contents;
   }
 
   toYaml() {
