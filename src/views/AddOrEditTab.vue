@@ -9,6 +9,7 @@ import ResponseForm, {
 } from "@/components/ResponseForm.vue";
 import Dialog from "@/components/Dialog.vue";
 import { ParameterManager } from "@/lib/parameter-manager";
+import { SwaggerParser } from "@/lib/swagger-parser";
 import type { ParameterFormData } from "@/components/ParameterForm.vue";
 import type { ParameterType } from "@/lib/available-parameters";
 import { getMethodTailwindClass } from "@/lib/available-methods";
@@ -32,27 +33,16 @@ const formData = ref<PathFormData>({
 });
 
 function handleCodeClick() {
-  // convert responses array to object with code as the key
-  const responses = formData.value.responses.responses.reduce<{[code: number]: any}>((acc, response) => {
-    acc[response.code] = {
-      description: response.description
-    }
+  const parser = new SwaggerParser();
+  parser.addPath(
+    formData.value.path,
+    formData.value.method,
+    formData.value.description || "",
+    formData.value.parameters.parameters,
+    parser.responsesFromArray(formData.value.responses.responses)
+  )
 
-    return acc
-  }, {})
-
-  const swagger = {
-    [formData.value.path]: {
-      [formData.value.method]: {
-        parameters: formData.value.parameters.parameters,
-        description: formData.value.description,
-        responses,
-      },
-    },
-  };
-
-  const parsed = yaml.dump(swagger);
-  console.log(parsed);
+  console.log(parser.toYaml());
 }
 
 const availableMethods = <const>["get", "post", "put", "delete"];
