@@ -6,7 +6,7 @@ import type { Parameter } from "./parameter-manager";
 
 export class SwaggerParser {
   swagger: Partial<OpenAPI.Document> = {
-    paths: {}
+    paths: {},
   };
 
   addPath(
@@ -15,7 +15,7 @@ export class SwaggerParser {
     description: string,
     parameters: Parameter[],
     responses: {
-        [code: number | string]: any;
+      [code: number | string]: any;
     }
   ) {
     const swaggerPath = {
@@ -29,21 +29,19 @@ export class SwaggerParser {
     };
 
     this.swagger.paths = {
-        ...this.swagger.paths,
-        ...swaggerPath
-    }
+      ...this.swagger.paths,
+      ...swaggerPath,
+    };
   }
 
-  /** 
+  /**
    * Convert responses array to object with code as the key
-   * 
-   * @param object 
-   * 
+   *
+   * @param object
+   *
    * @returns An object in the swagger response structure.
    */
-  responsesFromArray(
-    object: { code: number | string; [key: string]: any }[]
-  ) {
+  responsesFromArray(object: { code: number | string; [key: string]: any }[]) {
     const responses = object.reduce<{
       [code: number | string]: any;
     }>((acc, response) => {
@@ -54,7 +52,7 @@ export class SwaggerParser {
       return acc;
     }, {});
 
-    return responses
+    return responses;
   }
 
   toYaml() {
