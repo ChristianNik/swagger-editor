@@ -32,12 +32,21 @@ const formData = ref<PathFormData>({
 });
 
 function handleCodeClick() {
+  // convert responses array to object with code as the key
+  const responses = formData.value.responses.responses.reduce<{[code: number]: any}>((acc, response) => {
+    acc[response.code] = {
+      description: response.description
+    }
+
+    return acc
+  }, {})
+
   const swagger = {
     [formData.value.path]: {
       [formData.value.method]: {
         parameters: formData.value.parameters.parameters,
         description: formData.value.description,
-        responses: [],
+        responses,
       },
     },
   };
